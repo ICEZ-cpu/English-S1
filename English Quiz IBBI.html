@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modul Grammar Tenses & Kuis Interaktif 100 Soal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Smooth scrolling and clean custom scrollbar for question navigator */
+    html {
+      scroll-behavior: smooth;
+    }
+    .nav-grid-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .nav-grid-scroll::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .nav-grid-scroll::-webkit-scrollbar-track {
+      background-color: #f1f5f9;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 py-3.5">
+        <!-- Brand / App Title -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
+            T100
+          </div>
+          <div>
+            <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">
+              English Tenses &amp; 100-Soal Quiz
+            </h1>
+            <p class="text-xs text-slate-500">
+              Materi Lengkap, Penjelasan Detail &amp; Auto-Score
+            </p>
+          </div>
+        </div>
+
+        <!-- Primary View Switcher -->
+        <nav aria-label="Navigasi Utama" class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
+          <button
+            id="tab-module-btn"
+            type="button"
+            onclick="switchView('module')"
+            class="px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-brand-600 text-white shadow-sm"
+          >
+            📚 Modul Materi
+          </button>
+          <button
+            id="tab-quiz-btn"
+            type="button"
+            onclick="switchView('quiz')"
+            class="px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900"
+          >
+            ✍️ Kuis 100 Soal
+          </button>
+        </nav>
+
+        <!-- Live Score Pill -->
+        <div class="hidden md:flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2">
+          <div class="text-right">
+            <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400">Skor Terkini</div>
+            <div id="header-score-text" class="text-sm font-bold text-slate-800">0 / 100 (0%)</div>
+          </div>
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Toast / Status Notification Banner (replaces alert/confirm) -->
+  <div id="toast-banner" class="fixed bottom-5 right-5 z-50 max-w-sm w-[calc(100%-2.5rem)] hidden">
+    <div id="toast-card" class="rounded-2xl shadow-lg border px-4 py-3.5 bg-slate-900 text-white border-slate-700 flex items-start justify-between gap-3">
+      <p id="toast-message" class="text-xs sm:text-sm font-medium leading-relaxed"></p>
+      <button type="button" onclick="hideToast()" class="text-slate-400 hover:text-white text-sm font-bold px-1" aria-label="Tutup notifikasi">✕</button>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 1: LEARNING MODULE (MATERI LENGKAP)                              -->
+    <!-- ===================================================================== -->
+    <section id="module-view" class="space-y-8">
+      <!-- Hero Banner -->
+      <div class="rounded-3xl bg-gradient-to-br from-brand-700 via-brand-600 to-indigo-800 text-white p-6 sm:p-10 shadow-md">
+        <div class="max-w-3xl space-y-4">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-semibold tracking-wide">
+            ✨ Panduan Belajar Grammar Bahasa Inggris Terstruktur
+          </span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+            Kuasai Tenses Bahasa Inggris &amp; Uji Kemampuan dengan 100 Soal Latihan
+          </h2>
+          <p class="text-sm sm:text-base text-indigo-100 leading-relaxed">
+            Pelajari rumus kalimat positif (+), negatif (-), dan tanya (?), fungsi penggunaan, kata keterangan waktu (<em>time signals</em>), serta contoh kalimat lengkap beserta artinya. Setelah itu, kerjakan <strong>100 soal pilihan ganda</strong> dengan penilaian otomatis dan pembahasan lengkap.
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onclick="startQuizFromModule()"
+              class="px-5 py-3 rounded-xl bg-white text-brand-700 font-bold text-sm hover:bg-indigo-50 transition shadow-sm"
+            >
+              🚀 Mulai Kuis 100 Soal Sekarang
+            </button>
+            <a
+              href="#comparison-table"
+              class="px-5 py-3 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-sm transition border border-white/20"
+            >
+              📊 Lihat Tabel Ringkasan
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Jump Chips for Tenses -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+        <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+          Lompat Cepat ke Materi Tense:
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <a href="#tense-present" class="px-3 py-1.5 rounded-lg bg-brand-50 text-brand-700 hover:bg-brand-100 text-xs sm:text-sm font-semibold transition">1. Simple Present Tense</a>
+          <a href="#tense-past" class="px-3 py-1.5 rounded-lg bg-amber-50 text-amber-800 hover:bg-amber-100 text-xs sm:text-sm font-semibold transition">2. Simple Past Tense</a>
+          <a href="#tense-continuous" class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 text-xs sm:text-sm font-semibold transition">3. Continuous Tense</a>
+          <a href="#tense-future" class="px-3 py-1.5 rounded-lg bg-sky-50 text-sky-800 hover:bg-sky-100 text-xs sm:text-sm font-semibold transition">4. Simple Future Tense</a>
+          <a href="#tense-present-perfect" class="px-3 py-1.5 rounded-lg bg-purple-50 text-purple-800 hover:bg-purple-100 text-xs sm:text-sm font-semibold transition">5. Present Perfect Tense</a>
+          <a href="#tense-past-review" class="px-3 py-1.5 rounded-lg bg-rose-50 text-rose-800 hover:bg-rose-100 text-xs sm:text-sm font-semibold transition">6. Past Tense &amp; Past Perfect Review</a>
+        </div>
+      </div>
+
+      <!-- Tenses Cards Grid -->
+      <div id="tenses-cards-container" class="space-y-6">
+        <!-- Populated cleanly via JS or static structured cards below -->
+        <!-- 1. Simple Present Tense -->
+        <article id="tense-present" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md">Materi 01</span>
+              <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1.5">Simple Present Tense</h3>
+            </div>
+            <button type="button" onclick="startQuizWithCategory('Simple Present')" class="px-3.5 py-2 rounded-xl bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs sm:text-sm font-semibold transition">
+              Latihan Topik Ini →
+            </button>
+          </div>
+
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+            Digunakan untuk menyatakan <strong>kebiasaan sehari-hari (habits)</strong>, <strong>fakta umum / kebenaran ilmiah (general truths)</strong>, serta <strong>jadwal tetap (scheduled events)</strong>.
+          </p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Formula Box -->
+            <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Rumus Kalimat (Verbal &amp; Nominal)</h4>
+              <p class="text-xs sm:text-sm"><strong class="text-emerald-700">(+) Positif:</strong> S + V1 (-s/-es untuk He, She, It) + O | atau S + am/is/are + Complement</p>
+              <p class="text-xs sm:text-sm"><strong class="text-rose-700">(-) Negatif:</strong> S + do/does + not + V1 + O | atau S + am/is/are + not + Complement</p>
+              <p class="text-xs sm:text-sm"><strong class="text-brand-700">(?) Tanya:</strong> Do/Does + S + V1 + O? | atau Am/Is/Are + S + Complement?</p>
+              <p class="text-xs text-slate-500 pt-1">Catatan: Setelah <em>does/do/did</em>, kata kerja kembali ke bentuk dasar (<strong>V1</strong> tanpa -s/-es).</p>
+            </div>
+
+            <!-- Time Signals & Usage -->
+            <div class="rounded-xl bg-brand-50/50 border border-brand-100 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-brand-700">Time Signals (Keterangan Waktu)</h4>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="px-2.5 py-1 rounded-md bg-white border border-brand-200 text-xs font-medium text-slate-700">always (selalu)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-brand-200 text-xs font-medium text-slate-700">usually (biasanya)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-brand-200 text-xs font-medium text-slate-700">often (sering)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-brand-200 text-xs font-medium text-slate-700">sometimes (kadang-kadang)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-brand-200 text-xs font-medium text-slate-700">every day/week/year</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-brand-200 text-xs font-medium text-slate-700">on Mondays</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 pt-1">
+                <strong>Fakta umum:</strong> <em>The sun rises in the east. Water boils at 100°C.</em>
+              </p>
+            </div>
+          </div>
+
+          <!-- Examples -->
+          <div class="rounded-xl border border-slate-200 overflow-hidden">
+            <div class="bg-slate-100 px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-600">Contoh Kalimat</div>
+            <div class="divide-y divide-slate-100 text-sm">
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(+)</strong> She <u>drinks</u> coffee every morning.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Dia minum kopi setiap pagi.</span>
+              </div>
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(-)</strong> They <u>do not play</u> football on Sundays.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Mereka tidak bermain sepak bola pada hari Minggu.</span>
+              </div>
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(?)</strong> <u>Does</u> he <u>work</u> at the hospital?</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Apakah dia bekerja di rumah sakit?</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Simple Past Tense -->
+        <article id="tense-past" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">Materi 02</span>
+              <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1.5">Simple Past Tense</h3>
+            </div>
+            <button type="button" onclick="startQuizWithCategory('Simple Past')" class="px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs sm:text-sm font-semibold transition">
+              Latihan Topik Ini →
+            </button>
+          </div>
+
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+            Digunakan untuk menyatakan <strong>peristiwa yang dimulai dan selesai pada waktu tertentu di masa lalu</strong>, serta rangkaian kejadian masa lampau.
+          </p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Rumus Kalimat</h4>
+              <p class="text-xs sm:text-sm"><strong class="text-emerald-700">(+) Positif:</strong> S + V2 (Regular: +ed / Irregular: go→went) + O | atau S + was/were + Complement</p>
+              <p class="text-xs sm:text-sm"><strong class="text-rose-700">(-) Negatif:</strong> S + did not (didn't) + V1 + O | atau S + was/were + not + Complement</p>
+              <p class="text-xs sm:text-sm"><strong class="text-brand-700">(?) Tanya:</strong> Did + S + V1 + O? | atau Was/Were + S + Complement?</p>
+              <p class="text-xs text-slate-500 pt-1"><em>Was</em> dipakai untuk I, he, she, it; <em>Were</em> dipakai untuk you, we, they.</p>
+            </div>
+
+            <div class="rounded-xl bg-amber-50/50 border border-amber-100 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-amber-800">Time Signals (Keterangan Waktu)</h4>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="px-2.5 py-1 rounded-md bg-white border border-amber-200 text-xs font-medium text-slate-700">yesterday (kemarin)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-amber-200 text-xs font-medium text-slate-700">last night/week/month/year</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-amber-200 text-xs font-medium text-slate-700">two days ago (dua hari lalu)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-amber-200 text-xs font-medium text-slate-700">in 2020</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-amber-200 text-xs font-medium text-slate-700">this morning (sudah berlalu)</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 pt-1">
+                <strong>Irregular verbs umum:</strong> <em>go–went–gone, buy–bought–bought, see–saw–seen, write–wrote–written.</em>
+              </p>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-slate-200 overflow-hidden">
+            <div class="bg-slate-100 px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-600">Contoh Kalimat</div>
+            <div class="divide-y divide-slate-100 text-sm">
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(+)</strong> We <u>visited</u> the museum last weekend.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Kami mengunjungi museum akhir pekan lalu.</span>
+              </div>
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(-)</strong> She <u>didn't attend</u> the meeting yesterday.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Dia tidak menghadiri rapat kemarin.</span>
+              </div>
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(?)</strong> <u>Did</u> you <u>find</u> your keys?</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Apakah kamu menemukan kunci-kuncimu?</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3. Continuous Tense -->
+        <article id="tense-continuous" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">Materi 03</span>
+              <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1.5">Continuous Tense (Present &amp; Past Continuous)</h3>
+            </div>
+            <button type="button" onclick="startQuizWithCategory('Continuous Tense')" class="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs sm:text-sm font-semibold transition">
+              Latihan Topik Ini →
+            </button>
+          </div>
+
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+            Bentuk <strong>Continuous</strong> selalu menggunakan pola <strong>be + V-ing</strong> untuk menunjukkan aksi yang sedang berlangsung. Fokus utama di sini adalah <strong>Present Continuous</strong> (sedang terjadi saat ini/rencana dekat) dan <strong>Past Continuous</strong> (sedang berlangsung pada waktu tertentu di masa lalu, sering berpasangan dengan <em>when/while</em>).
+          </p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Rumus Present &amp; Past Continuous</h4>
+              <p class="text-xs sm:text-sm"><strong class="text-emerald-700">Present Continuous:</strong> S + (am/is/are) + V-ing | Negatif: + not | Tanya: Am/Is/Are + S + V-ing?</p>
+              <p class="text-xs sm:text-sm"><strong class="text-amber-700">Past Continuous:</strong> S + (was/were) + V-ing | Negatif: + not | Tanya: Was/Were + S + V-ing?</p>
+              <p class="text-xs text-slate-500 pt-1">
+                <strong>Stative verbs</strong> (seperti <em>know, like, love, believe, want, need</em>) umumnya tidak dipakai dalam bentuk continuous.
+              </p>
+            </div>
+
+            <div class="rounded-xl bg-emerald-50/50 border border-emerald-100 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-800">Time Signals &amp; Pola Kalimat</h4>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="px-2.5 py-1 rounded-md bg-white border border-emerald-200 text-xs font-medium text-slate-700">now / right now</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-emerald-200 text-xs font-medium text-slate-700">at the moment</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-emerald-200 text-xs font-medium text-slate-700">Look! / Listen!</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-emerald-200 text-xs font-medium text-slate-700">at 8 PM yesterday</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-emerald-200 text-xs font-medium text-slate-700">while (sementara)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-emerald-200 text-xs font-medium text-slate-700">when (ketika)</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 pt-1">
+                <strong>Pola While &amp; When:</strong> <em>While</em> + Past Continuous, Simple Past (contoh: <em>While I was studying, the phone rang.</em>).
+              </p>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-slate-200 overflow-hidden">
+            <div class="bg-slate-100 px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-600">Contoh Kalimat</div>
+            <div class="divide-y divide-slate-100 text-sm">
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(+) Present Cont.</strong> Listen! Someone <u>is knocking</u> on the door.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Dengar! Seseorang sedang mengetuk pintu.</span>
+              </div>
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(+) Past Cont.</strong> They <u>were watching</u> TV at 9 o'clock last night.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Mereka sedang menonton TV jam 9 tadi malam.</span>
+              </div>
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(?) Past Cont.</strong> What <u>were you doing</u> when the lights went out?</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Apa yang sedang kamu lakukan ketika lampu padam?</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4. Simple Future Tense -->
+        <article id="tense-future" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 px-2.5 py-1 rounded-md">Materi 04</span>
+              <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1.5">Simple Future Tense</h3>
+            </div>
+            <button type="button" onclick="startQuizWithCategory('Simple Future')" class="px-3.5 py-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs sm:text-sm font-semibold transition">
+              Latihan Topik Ini →
+            </button>
+          </div>
+
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+            Digunakan untuk menyatakan <strong>keputusan spontan</strong>, <strong>janji/tawaran</strong>, <strong>prediksi masa depan</strong>, atau <strong>rencana yang sudah disiapkan (be going to)</strong>.
+          </p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Rumus (Will &amp; Be Going To)</h4>
+              <p class="text-xs sm:text-sm"><strong class="text-sky-700">Will:</strong> (+) S + will + V1 | (-) S + will not (won't) + V1 | (?) Will + S + V1?</p>
+              <p class="text-xs sm:text-sm"><strong class="text-indigo-700">Be Going To:</strong> (+) S + (am/is/are) + going to + V1 | (-) + not going to + V1</p>
+              <p class="text-xs text-slate-500 pt-1">
+                Gunakan <strong>will</strong> untuk keputusan mendadak/janji; gunakan <strong>be going to</strong> untuk rencana matang atau bukti yang sudah terlihat.
+              </p>
+            </div>
+
+            <div class="rounded-xl bg-sky-50/50 border border-sky-100 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-sky-800">Time Signals (Keterangan Waktu)</h4>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="px-2.5 py-1 rounded-md bg-white border border-sky-200 text-xs font-medium text-slate-700">tomorrow (besok)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-sky-200 text-xs font-medium text-slate-700">next week/month/year</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-sky-200 text-xs font-medium text-slate-700">soon (segera)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-sky-200 text-xs font-medium text-slate-700">in two days</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-sky-200 text-xs font-medium text-slate-700">I think / probably</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 pt-1">
+                <strong>Bukti terlihat:</strong> <em>Look at those dark clouds! It is going to rain.</em>
+              </p>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-slate-200 overflow-hidden">
+            <div class="bg-slate-100 px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-600">Contoh Kalimat</div>
+            <div class="divide-y divide-slate-100 text-sm">
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(+)</strong> I <u>will call</u> you when I arrive.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Aku akan meneleponmu ketika aku tiba.</span>
+              </div>
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(-)</strong> He <u>won't join</u> the trip tomorrow.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Dia tidak akan ikut perjalanan besok.</span>
+              </div>
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(?)</strong> <u>Are</u> you <u>going to visit</u> Bali next month?</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Apakah kamu akan mengunjungi Bali bulan depan?</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5. Present Perfect Tense -->
+        <article id="tense-present-perfect" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md">Materi 05</span>
+              <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1.5">Present Perfect Tense</h3>
+            </div>
+            <button type="button" onclick="startQuizWithCategory('Present Perfect')" class="px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 text-xs sm:text-sm font-semibold transition">
+              Latihan Topik Ini →
+            </button>
+          </div>
+
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+            Digunakan untuk menyatakan <strong>tindakan yang sudah selesai dengan hasil/dampak yang masih terasa sekarang</strong>, <strong>pengalaman hidup</strong> (tanpa menyebut waktu lampau yang spesifik), atau <strong>aksi yang dimulai di masa lalu dan masih berlanjut hingga kini</strong>.
+          </p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Rumus Kalimat</h4>
+              <p class="text-xs sm:text-sm"><strong class="text-emerald-700">(+) Positif:</strong> S + (has/have) + V3 (Past Participle) + O</p>
+              <p class="text-xs sm:text-sm"><strong class="text-rose-700">(-) Negatif:</strong> S + (has/have) + not + V3 + O</p>
+              <p class="text-xs sm:text-sm"><strong class="text-brand-700">(?) Tanya:</strong> Has/Have + S + V3 + O?</p>
+              <p class="text-xs text-slate-500 pt-1">
+                <strong>Has</strong> untuk He, She, It; <strong>Have</strong> untuk I, You, We, They.
+              </p>
+            </div>
+
+            <div class="rounded-xl bg-purple-50/50 border border-purple-100 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-purple-800">Time Signals (Since vs For, Already, Yet, Just, Ever)</h4>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="px-2.5 py-1 rounded-md bg-white border border-purple-200 text-xs font-medium text-slate-700">since (sejak titik waktu)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-purple-200 text-xs font-medium text-slate-700">for (selama durasi)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-purple-200 text-xs font-medium text-slate-700">already (sudah)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-purple-200 text-xs font-medium text-slate-700">yet (belum / sudah di ?)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-purple-200 text-xs font-medium text-slate-700">just (baru saja)</span>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-purple-200 text-xs font-medium text-slate-700">ever / never</span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 pt-1">
+                Contoh: <em>since 2019</em> (titik awal) vs <em>for five years</em> (durasi waktu).
+              </p>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-slate-200 overflow-hidden">
+            <div class="bg-slate-100 px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-600">Contoh Kalimat</div>
+            <div class="divide-y divide-slate-100 text-sm">
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(+)</strong> She <u>has lived</u> in Jakarta since 2021.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Dia telah tinggal di Jakarta sejak 2021.</span>
+              </div>
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(-)</strong> I <u>haven't finished</u> my homework yet.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Aku belum menyelesaikan PR-ku.</span>
+              </div>
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(?)</strong> <u>Have</u> you ever <u>eaten</u> sushi?</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Apakah kamu pernah makan sushi?</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6. Past Tense & Past Perfect Review -->
+        <article id="tense-past-review" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md">Materi 06</span>
+              <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1.5">Past Tense &amp; Past Perfect Review (Perbandingan Waktu Lampau)</h3>
+            </div>
+            <button type="button" onclick="startQuizWithCategory('Past Review')" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-800 text-xs sm:text-sm font-semibold transition">
+              Latihan Topik Ini →
+            </button>
+          </div>
+
+          <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+            Bagian ini memperkuat pemahaman <strong>Simple Past Tense</strong> serta memperkenalkannya berdampingan dengan <strong>Past Perfect Tense (had + V3)</strong>—digunakan untuk menyatakan kejadian lampau yang terjadi <strong>lebih dulu</strong> sebelum kejadian lampau lainnya.
+          </p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Past Perfect vs Simple Past</h4>
+              <p class="text-xs sm:text-sm"><strong class="text-rose-700">Past Perfect:</strong> S + had + V3 (kejadian pertama / lebih awal di masa lalu)</p>
+              <p class="text-xs sm:text-sm"><strong class="text-amber-700">Simple Past:</strong> S + V2 (kejadian berikutnya di masa lalu)</p>
+              <p class="text-xs text-slate-500 pt-1">
+                Sering muncul dengan kata hubung <em>after, before, when, by the time, already</em>.
+              </p>
+            </div>
+
+            <div class="rounded-xl bg-rose-50/50 border border-rose-100 p-4 space-y-2.5">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-rose-800">Kunci Membedakan Past vs Present Perfect</h4>
+              <p class="text-xs sm:text-sm text-slate-700">
+                • Ada keterangan waktu lampau spesifik (<em>yesterday, last week, in 2018, ago</em>) → gunakan <strong>Simple Past</strong>.
+              </p>
+              <p class="text-xs sm:text-sm text-slate-700">
+                • Fokus pada hasil sekarang / durasi sejak lampau hingga kini / tanpa waktu spesifik → gunakan <strong>Present Perfect</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div class="rounded-xl border border-slate-200 overflow-hidden">
+            <div class="bg-slate-100 px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-600">Contoh Kalimat</div>
+            <div class="divide-y divide-slate-100 text-sm">
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(+)</strong> The train <u>had left</u> before we <u>arrived</u> at the station.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Kereta sudah berangkat sebelum kami tiba di stasiun.</span>
+              </div>
+              <div class="p-3.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <span><strong>(+)</strong> After she <u>had finished</u> dinner, she <u>went</u> to bed.</span>
+                <span class="text-slate-500 text-xs sm:text-sm">Setelah dia selesai makan malam, dia pergi tidur.</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Comparison Table -->
+      <div id="comparison-table" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+        <h3 class="text-xl font-bold text-slate-900 mb-4">Tabel Ringkasan Perbandingan Tenses</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                <th class="py-3 px-4 font-bold rounded-tl-xl">Tense</th>
+                <th class="py-3 px-4 font-bold">Rumus Utama (+)</th>
+                <th class="py-3 px-4 font-bold">Fungsi Utama</th>
+                <th class="py-3 px-4 font-bold rounded-tr-xl">Kata Kunci Waktu</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-semibold text-brand-700">Simple Present</td>
+                <td class="py-3 px-4 font-mono text-xs">S + V1(-s/-es)</td>
+                <td class="py-3 px-4">Kebiasaan, fakta umum, jadwal</td>
+                <td class="py-3 px-4">always, usually, every day</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-semibold text-amber-700">Simple Past</td>
+                <td class="py-3 px-4 font-mono text-xs">S + V2</td>
+                <td class="py-3 px-4">Kejadian selesai di masa lalu</td>
+                <td class="py-3 px-4">yesterday, last night, ago</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-semibold text-emerald-700">Present Continuous</td>
+                <td class="py-3 px-4 font-mono text-xs">S + am/is/are + V-ing</td>
+                <td class="py-3 px-4">Sedang terjadi saat ini</td>
+                <td class="py-3 px-4">now, right now, Look!</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-semibold text-emerald-800">Past Continuous</td>
+                <td class="py-3 px-4 font-mono text-xs">S + was/were + V-ing</td>
+                <td class="py-3 px-4">Sedang terjadi di waktu lampau</td>
+                <td class="py-3 px-4">while, when, at 7 PM yesterday</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-semibold text-sky-700">Simple Future</td>
+                <td class="py-3 px-4 font-mono text-xs">S + will / (be) going to + V1</td>
+                <td class="py-3 px-4">Rencana, prediksi, janji masa depan</td>
+                <td class="py-3 px-4">tomorrow, next week, soon</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-semibold text-purple-700">Present Perfect</td>
+                <td class="py-3 px-4 font-mono text-xs">S + has/have + V3</td>
+                <td class="py-3 px-4">Pengalaman, hasil kini, sejak/selama</td>
+                <td class="py-3 px-4">since, for, already, yet, ever</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-4 font-semibold text-rose-700">Past Perfect</td>
+                <td class="py-3 px-4 font-mono text-xs">S + had + V3</td>
+                <td class="py-3 px-4">Terjadi sebelum kejadian lampau lain</td>
+                <td class="py-3 px-4">before, after, by the time</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- VIEW 2: 100-QUESTION INTERACTIVE QUIZ                                 -->
+    <!-- ===================================================================== -->
+    <section id="quiz-view" class="hidden space-y-6">
+      <!-- Quiz Control & Filter Bar -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-5">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md">
+              Bank Soal 100 Butir
+            </span>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1.5">
+              Latihan &amp; Ujian Interaktif Tenses
+            </h2>
+            <p id="filter-status-text" class="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Menampilkan semua 100 soal dari seluruh kategori tense.
+            </p>
+          </div>
+
+          <!-- Timer & Action Buttons -->
+          <div class="flex flex-wrap items-center gap-2.5">
+            <div class="px-3.5 py-2 rounded-xl bg-slate-100 border border-slate-200 text-xs sm:text-sm font-bold text-slate-700 flex items-center gap-2">
+              <span>⏱️ Waktu:</span>
+              <span id="timer-display" class="font-mono">00:00</span>
+            </div>
+            <button
+              type="button"
+              id="toggle-instant-btn"
+              onclick="toggleInstantFeedback()"
+              class="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs sm:text-sm font-semibold transition"
+            >
+              ⚡ Umpan Balik Instan: ON
+            </button>
+            <button
+              type="button"
+              onclick="submitQuizSummary()"
+              class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-bold shadow-sm transition"
+            >
+              📊 Selesai &amp; Lihat Nilai
+            </button>
+            <button
+              type="button"
+              onclick="confirmResetQuiz()"
+              class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs sm:text-sm font-semibold transition"
+            >
+              🔄 Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Topic Filter Pills -->
+        <div class="flex flex-wrap gap-2 pt-2 border-t border-slate-100" id="category-filters">
+          <button type="button" data-cat="ALL" onclick="setCategoryFilter('ALL')" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white transition">Semua (100)</button>
+          <button type="button" data-cat="Simple Present" onclick="setCategoryFilter('Simple Present')" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Simple Present (17)</button>
+          <button type="button" data-cat="Simple Past" onclick="setCategoryFilter('Simple Past')" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Simple Past (17)</button>
+          <button type="button" data-cat="Continuous Tense" onclick="setCategoryFilter('Continuous Tense')" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Continuous Tense (17)</button>
+          <button type="button" data-cat="Simple Future" onclick="setCategoryFilter('Simple Future')" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Simple Future (16)</button>
+          <button type="button" data-cat="Present Perfect" onclick="setCategoryFilter('Present Perfect')" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Present Perfect (17)</button>
+          <button type="button" data-cat="Past Review" onclick="setCategoryFilter('Past Review')" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Past Review &amp; Past Perfect (16)</button>
+        </div>
+
+        <!-- Live Score & Progress Bar -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+          <div class="rounded-xl bg-slate-50 border border-slate-200 p-3">
+            <div class="text-[11px] font-semibold uppercase text-slate-400">Terjawab</div>
+            <div id="stat-answered" class="text-lg sm:text-xl font-extrabold text-slate-800">0 / 100</div>
+          </div>
+          <div class="rounded-xl bg-emerald-50/70 border border-emerald-200 p-3">
+            <div class="text-[11px] font-semibold uppercase text-emerald-700">Benar</div>
+            <div id="stat-correct" class="text-lg sm:text-xl font-extrabold text-emerald-700">0</div>
+          </div>
+          <div class="rounded-xl bg-rose-50/70 border border-rose-200 p-3">
+            <div class="text-[11px] font-semibold uppercase text-rose-700">Salah</div>
+            <div id="stat-wrong" class="text-lg sm:text-xl font-extrabold text-rose-700">0</div>
+          </div>
+          <div class="rounded-xl bg-brand-50/70 border border-brand-200 p-3">
+            <div class="text-[11px] font-semibold uppercase text-brand-700">Skor Otomatis</div>
+            <div id="stat-score" class="text-lg sm:text-xl font-extrabold text-brand-700">0%</div>
+          </div>
+        </div>
+
+        <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+          <div id="progress-bar-fill" class="bg-brand-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Score Summary Report Panel (Shown when user clicks Finish/Score or toggles report) -->
+      <div id="score-report-panel" class="hidden bg-white rounded-2xl border-2 border-brand-200 p-6 sm:p-8 shadow-md space-y-6">
+        <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-100 pb-5">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-100 px-3 py-1 rounded-full">
+              Rekapitulasi Nilai Otomatis
+            </span>
+            <h3 id="report-grade-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">
+              Hasil Latihan Anda
+            </h3>
+            <p id="report-grade-desc" class="text-sm text-slate-600 mt-1"></p>
+          </div>
+          <div class="text-left sm:text-right bg-brand-50 border border-brand-200 rounded-2xl px-5 py-3.5">
+            <div class="text-xs font-bold uppercase text-brand-600">Nilai Akhir</div>
+            <div id="report-final-score" class="text-3xl sm:text-4xl font-black text-brand-800">0 / 100</div>
+            <div id="report-percentage" class="text-xs font-semibold text-brand-700">0% Akurasi</div>
+          </div>
+        </div>
+
+        <!-- Breakdown per Tense Category -->
+        <div>
+          <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3">Rincian Skor per Kategori Tense</h4>
+          <div id="category-breakdown-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+        </div>
+
+        <div class="flex flex-wrap gap-3 pt-2">
+          <button
+            type="button"
+            onclick="document.getElementById('score-report-panel').classList.add('hidden')"
+            class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold transition"
+          >
+            Tinjau Soal &amp; Pembahasan
+          </button>
+          <button
+            type="button"
+            onclick="confirmResetQuiz()"
+            class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-semibold transition"
+          >
+            Ulangi Kuis dari Awal
+          </button>
+        </div>
+      </div>
+
+      <!-- Two-Column Quiz Workspace: Question Card + Navigator Sidebar -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- Active Question Area (8 cols) -->
+        <div class="lg:col-span-8 space-y-4">
+          <div id="question-card" class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+            <!-- Question Header -->
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span id="q-number-badge" class="px-3 py-1 rounded-lg bg-slate-900 text-white text-xs sm:text-sm font-bold">
+                  Soal #1
+                </span>
+                <span id="q-category-badge" class="px-3 py-1 rounded-lg bg-brand-50 text-brand-700 text-xs font-bold">
+                  Simple Present
+                </span>
+              </div>
+              <span id="q-status-badge" class="text-xs font-semibold text-slate-400">
+                Belum dijawab
+              </span>
+            </div>
+
+            <!-- Question Prompt -->
+            <div class="space-y-2">
+              <p id="q-prompt-text" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug"></p>
+              <p id="q-hint-text" class="text-xs text-slate-500"></p>
+            </div>
+
+            <!-- Options Container (A, B, C, D) -->
+            <div id="options-container" class="space-y-3"></div>
+
+            <!-- Explanation Box -->
+            <div id="explanation-box" class="hidden rounded-2xl border p-4 sm:p-5 space-y-2 transition-all">
+              <div class="flex items-center justify-between gap-2">
+                <span id="explanation-verdict" class="text-sm font-extrabold"></span>
+                <span id="explanation-correct-opt" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-white/80 border"></span>
+              </div>
+              <p id="explanation-detail" class="text-xs sm:text-sm leading-relaxed text-slate-700"></p>
+            </div>
+
+            <!-- Previous / Next Navigation Buttons -->
+            <div class="flex items-center justify-between gap-3 pt-4 border-t border-slate-100">
+              <button
+                type="button"
+                id="prev-q-btn"
+                onclick="navigateQuestion(-1)"
+                class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none text-slate-800 text-sm font-bold transition"
+              >
+                ← Sebelumnya
+              </button>
+
+              <span id="filtered-position-indicator" class="text-xs font-semibold text-slate-500">
+                1 / 100
+              </span>
+
+              <button
+                type="button"
+                id="next-q-btn"
+                onclick="navigateQuestion(1)"
+                class="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:opacity-40 disabled:pointer-events-none text-white text-sm font-bold transition shadow-sm"
+              >
+                Berikutnya →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 100-Question Navigator Sidebar (4 cols) -->
+        <aside class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-slate-900">Navigasi Nomor Soal</h3>
+            <span class="text-xs text-slate-400">Klik nomor untuk melompat</span>
+          </div>
+
+          <!-- Legend -->
+          <div class="flex flex-wrap gap-3 text-[11px] font-semibold text-slate-600">
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-brand-600 inline-block"></span> Aktif</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-100 border border-emerald-500 inline-block"></span> Benar</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-100 border border-rose-500 inline-block"></span> Salah</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-slate-100 border border-slate-300 inline-block"></span> Kosong</span>
+          </div>
+
+          <!-- Number Grid -->
+          <div id="question-navigator-grid" class="grid grid-cols-10 sm:grid-cols-10 lg:grid-cols-8 gap-1.5 max-h-80 overflow-y-auto nav-grid-scroll pr-1"></div>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-5 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <span>English Tenses Learning Module &amp; 100-Question Interactive Quiz</span>
+      <span>Progres tersimpan otomatis di browser (localStorage)</span>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- JAVASCRIPT: 100 DISTINCT QUESTIONS, ENGINE, ANALYTICS & STORAGE       -->
+  <!-- ===================================================================== -->
+  <script>
+    /**
+     * 100 Distinct Multiple Choice Questions across 6 tense categories:
+     * 1. Simple Present (17 questions)
+     * 2. Simple Past (17 questions)
+     * 3. Continuous Tense (17 questions: Present Continuous & Past Continuous)
+     * 4. Simple Future (16 questions: will & be going to)
+     * 5. Present Perfect (17 questions: has/have + V3, since/for, already/yet/ever)
+     * 6. Past Review (16 questions: Past Tense vs Present Perfect & Past Perfect had + V3)
+     * Total = 100 questions.
+     */
+    const QUESTIONS = [
+      // --- SIMPLE PRESENT (1 - 17) ---
+      {
+        id: 1,
+        category: "Simple Present",
+        q: "My brother usually _____ coffee before going to the office.",
+        options: ["drink", "drinks", "drinking", "drank"],
+        ans: 1,
+        exp: "Subjek 'My brother' (orang ketiga tunggal / he) pada Simple Present dengan kata keterangan kebiasaan 'usually' menggunakan V1 + -s menjadi 'drinks'."
+      },
+      {
+        id: 2,
+        category: "Simple Present",
+        q: "The sun _____ in the east and sets in the west.",
+        options: ["rise", "rises", "rising", "rose"],
+        ans: 1,
+        exp: "Fakta umum / kebenaran ilmiah menggunakan Simple Present. Subjek tunggal 'The sun' memakai 'rises'."
+      },
+      {
+        id: 3,
+        category: "Simple Present",
+        q: "They _____ not watch television on weekday mornings.",
+        options: ["does", "do", "are", "did"],
+        ans: 1,
+        exp: "Kalimat negatif Simple Present untuk subjek jamak 'They' menggunakan auxiliary 'do + not' diikuti verb dasar 'watch'."
+      },
+      {
+        id: 4,
+        category: "Simple Present",
+        q: "_____ your sister speak Japanese fluently?",
+        options: ["Do", "Does", "Is", "Are"],
+        ans: 1,
+        exp: "Pertanyaan Simple Present dengan kata kerja 'speak' dan subjek tunggal 'your sister' (she) diawali 'Does'."
+      },
+      {
+        id: 5,
+        category: "Simple Present",
+        q: "Water _____ at 100 degrees Celsius at standard pressure.",
+        options: ["boil", "boils", "boiled", "is boiling"],
+        ans: 1,
+        exp: "Fakta ilmiah yang selalu benar menggunakan Simple Present. 'Water' bersifat uncountable singular sehingga memakai 'boils'."
+      },
+      {
+        id: 6,
+        category: "Simple Present",
+        q: "Rina and Dimas _____ to the gym three times a week.",
+        options: ["goes", "go", "going", "went"],
+        ans: 1,
+        exp: "Subjek majemuk 'Rina and Dimas' (they) dalam Simple Present memakai bentuk dasar 'go'."
+      },
+      {
+        id: 7,
+        category: "Simple Present",
+        q: "He _____ his homework every evening after dinner.",
+        options: ["do", "does", "doing", "did"],
+        ans: 1,
+        exp: "Untuk subjek 'He' dalam Simple Present, kata kerja 'do' berubah menjadi 'does'."
+      },
+      {
+        id: 8,
+        category: "Simple Present",
+        q: "A baker _____ bread and cakes early every morning.",
+        options: ["bake", "bakes", "baking", "baked"],
+        ans: 1,
+        exp: "Subjek tunggal 'A baker' dengan keterangan waktu rutin 'every morning' menggunakan 'bakes'."
+      },
+      {
+        id: 9,
+        category: "Simple Present",
+        q: "She doesn't _____ spicy food because of her stomach.",
+        options: ["likes", "like", "liked", "liking"],
+        ans: 1,
+        exp: "Setelah 'doesn't', kata kerja selalu kembali ke bentuk dasar (V1) tanpa -s, yaitu 'like'."
+      },
+      {
+        id: 10,
+        category: "Simple Present",
+        q: "The train from Bandung _____ at 07:15 AM every day.",
+        options: ["arrive", "arrives", "arriving", "arrived"],
+        ans: 1,
+        exp: "Jadwal tetap (scheduled events) menggunakan Simple Present. 'The train' tunggal memakai 'arrives'."
+      },
+      {
+        id: 11,
+        category: "Simple Present",
+        q: "I _____ a student at the state university.",
+        options: ["am", "is", "are", "be"],
+        ans: 0,
+        exp: "Kalimat nominal Simple Present untuk subjek 'I' menggunakan to be 'am'."
+      },
+      {
+        id: 12,
+        category: "Simple Present",
+        q: "Why _____ birds fly south for the winter?",
+        options: ["do", "does", "are", "is"],
+        ans: 0,
+        exp: "Subjek jamak 'birds' dalam kalimat tanya Simple Present dengan verb 'fly' menggunakan 'do'."
+      },
+      {
+        id: 13,
+        category: "Simple Present",
+        q: "My parents _____ very supportive of my career choice.",
+        options: ["am", "is", "are", "was"],
+        ans: 2,
+        exp: "Subjek jamak 'My parents' dalam kalimat nominal Simple Present menggunakan to be 'are'."
+      },
+      {
+        id: 14,
+        category: "Simple Present",
+        q: "A mechanic _____ cars and motorcycles in that garage.",
+        options: ["fix", "fixes", "fixing", "fixed"],
+        ans: 1,
+        exp: "Kata kerja berakhiran -x seperti 'fix' mendapat tambahan -es untuk subjek orang ketiga tunggal 'A mechanic' ('fixes')."
+      },
+      {
+        id: 15,
+        category: "Simple Present",
+        q: "We rarely _____ fast food during the school term.",
+        options: ["eat", "eats", "eating", "ate"],
+        ans: 0,
+        exp: "'Rarely' menunjukkan frekuensi kebiasaan dalam Simple Present; subjek 'We' memakai 'eat'."
+      },
+      {
+        id: 16,
+        category: "Simple Present",
+        q: "Does the library _____ on Sunday afternoons?",
+        options: ["opens", "open", "opening", "opened"],
+        ans: 1,
+        exp: "Kalimat tanya dengan 'Does' diikuti verb dasar (V1) 'open'."
+      },
+      {
+        id: 17,
+        category: "Simple Present",
+        q: "Earth _____ around the sun once every 365.25 days.",
+        options: ["orbit", "orbits", "orbited", "is orbiting"],
+        ans: 1,
+        exp: "Fakta astronomi yang tetap menggunakan Simple Present; 'Earth' tunggal memakai 'orbits'."
+      },
+
+      // --- SIMPLE PAST (18 - 34) ---
+      {
+        id: 18,
+        category: "Simple Past",
+        q: "We _____ to Yogyakarta by train last month.",
+        options: ["go", "goes", "went", "gone"],
+        ans: 2,
+        exp: "'Last month' menandakan waktu lampau spesifik sehingga memakai Simple Past (V2). Bentuk V2 dari 'go' adalah 'went'."
+      },
+      {
+        id: 19,
+        category: "Simple Past",
+        q: "She _____ her ankle while running yesterday morning.",
+        options: ["sprain", "sprains", "sprained", "spraining"],
+        ans: 2,
+        exp: "'Yesterday morning' menunjukkan kejadian masa lalu yang sudah selesai, memakai V2 regular verb 'sprained'."
+      },
+      {
+        id: 20,
+        category: "Simple Past",
+        q: "They _____ come to the meeting two days ago.",
+        options: ["don't", "doesn't", "didn't", "weren't"],
+        ans: 2,
+        exp: "Keterangan 'two days ago' menandakan Simple Past; bentuk negatifnya memakai 'didn't' + V1 ('come')."
+      },
+      {
+        id: 21,
+        category: "Simple Past",
+        q: "_____ you finish the report before the deadline yesterday?",
+        options: ["Do", "Does", "Did", "Were"],
+        ans: 2,
+        exp: "Pertanyaan Simple Past untuk aksi ('finish') dengan penanda 'yesterday' menggunakan 'Did' + subjek + V1."
+      },
+      {
+        id: 22,
+        category: "Simple Past",
+        q: "I _____ a great documentary on history last night.",
+        options: ["watch", "watches", "watched", "watching"],
+        ans: 2,
+        exp: "'Last night' menunjukkan masa lalu; bentuk past tense dari 'watch' adalah 'watched'."
+      },
+      {
+        id: 23,
+        category: "Simple Past",
+        q: "The museum _____ built in 1925.",
+        options: ["is", "are", "was", "were"],
+        ans: 2,
+        exp: "Tahun lampau '1925' menandakan Simple Past; subjek tunggal 'The museum' memakai 'was'."
+      },
+      {
+        id: 24,
+        category: "Simple Past",
+        q: "He _____ me a helpful advice when I was in trouble.",
+        options: ["give", "gives", "gave", "given"],
+        ans: 2,
+        exp: "Bentuk lampau (V2) dari irregular verb 'give' adalah 'gave'."
+      },
+      {
+        id: 25,
+        category: "Simple Past",
+        q: "Why _____ they late for the ceremony yesterday?",
+        options: ["was", "were", "did", "do"],
+        ans: 1,
+        exp: "'Late' adalah kata sifat (adjective), sehingga memakai to be lampau. Subjek jamak 'they' memakai 'were'."
+      },
+      {
+        id: 26,
+        category: "Simple Past",
+        q: "Sandra _____ a new laptop with her savings last week.",
+        options: ["buy", "buys", "bought", "buying"],
+        ans: 2,
+        exp: "'Last week' memakai Simple Past; V2 dari 'buy' adalah 'bought'."
+      },
+      {
+        id: 27,
+        category: "Simple Past",
+        q: "We didn't _____ much traffic on our way home last evening.",
+        options: ["see", "saw", "seen", "seeing"],
+        ans: 0,
+        exp: "Setelah 'didn't', gunakan bentuk dasar (V1) 'see', bukan 'saw' atau 'seen'."
+      },
+      {
+        id: 28,
+        category: "Simple Past",
+        q: "The children _____ happily in the backyard all afternoon yesterday.",
+        options: ["play", "plays", "played", "playing"],
+        ans: 2,
+        exp: "Aksi bermain yang telah selesai kemarin menggunakan bentuk lampau 'played'."
+      },
+      {
+        id: 29,
+        category: "Simple Past",
+        q: "Who _____ the telephone? Alexander Graham Bell did.",
+        options: ["invent", "invents", "invented", "inventing"],
+        ans: 2,
+        exp: "Peristiwa sejarah di masa lalu menggunakan Simple Past: 'invented'."
+      },
+      {
+        id: 30,
+        category: "Simple Past",
+        q: "I _____ at home because it rained heavily last Sunday.",
+        options: ["stay", "stays", "stayed", "staying"],
+        ans: 2,
+        exp: "'Last Sunday' menunjukkan waktu lampau; bentuk lampau 'stay' adalah 'stayed'."
+      },
+      {
+        id: 31,
+        category: "Simple Past",
+        q: "Was the exam difficult? No, it _____ quite easy.",
+        options: ["is", "are", "was", "were"],
+        ans: 2,
+        exp: "Pertanyaan memakai 'Was', sehingga jawaban yang sesuai dengan subjek tunggal 'it' adalah 'was'."
+      },
+      {
+        id: 32,
+        category: "Simple Past",
+        q: "They _____ a letter of complaint to the manager three days ago.",
+        options: ["write", "wrote", "written", "writing"],
+        ans: 1,
+        exp: "'Three days ago' menandakan Simple Past; V2 dari 'write' adalah 'wrote'."
+      },
+      {
+        id: 33,
+        category: "Simple Past",
+        q: "Did she _____ the invitation email on time?",
+        options: ["receive", "receives", "received", "receiving"],
+        ans: 0,
+        exp: "Setelah auxiliary 'Did', kata kerja kembali ke bentuk dasar (V1) 'receive'."
+      },
+      {
+        id: 34,
+        category: "Simple Past",
+        q: "Our team _____ the semifinal match last season.",
+        options: ["win", "wins", "won", "winning"],
+        ans: 2,
+        exp: "'Last season' memakai Simple Past; bentuk V2 dari 'win' adalah 'won'."
+      },
+
+      // --- CONTINUOUS TENSE (35 - 51) ---
+      {
+        id: 35,
+        category: "Continuous Tense",
+        q: "Look! The bus _____ toward our stop right now.",
+        options: ["come", "comes", "is coming", "was coming"],
+        ans: 2,
+        exp: "Seruan 'Look!' dan 'right now' menandakan aksi sedang berlangsung saat ini (Present Continuous): 'is coming'."
+      },
+      {
+        id: 36,
+        category: "Continuous Tense",
+        q: "Please be quiet; the baby _____ in the next room.",
+        options: ["sleep", "sleeps", "is sleeping", "was sleeping"],
+        ans: 2,
+        exp: "Kondisi saat ini menuntut Present Continuous untuk menunjukkan aksi yang sedang berlangsung: 'is sleeping'."
+      },
+      {
+        id: 37,
+        category: "Continuous Tense",
+        q: "At 8 PM last night, I _____ dinner with my family.",
+        options: ["have", "had", "am having", "was having"],
+        ans: 3,
+        exp: "Waktu spesifik di masa lalu ('At 8 PM last night') saat aksi sedang berjalan menggunakan Past Continuous: 'was having'."
+      },
+      {
+        id: 38,
+        category: "Continuous Tense",
+        q: "While I _____ for the bus, it started to rain.",
+        options: ["wait", "waited", "was waiting", "am waiting"],
+        ans: 2,
+        exp: "Kata hubung 'While' umumnya diikuti Past Continuous ('was waiting') untuk aksi berdurasi yang disela aksi singkat ('started')."
+      },
+      {
+        id: 39,
+        category: "Continuous Tense",
+        q: "What _____ you doing at the moment? Can I call you back?",
+        options: ["do", "are", "did", "were"],
+        ans: 1,
+        exp: "'At the moment' merujuk pada saat ini (Present Continuous). Subjek 'you' memakai 'are'."
+      },
+      {
+        id: 40,
+        category: "Continuous Tense",
+        q: "They _____ not playing football now; they are resting.",
+        options: ["do", "are", "were", "have"],
+        ans: 1,
+        exp: "Penanda 'now' dan konteks 'are resting' menunjukkan Present Continuous. Untuk 'They', gunakan 'are not'."
+      },
+      {
+        id: 41,
+        category: "Continuous Tense",
+        q: "The students _____ taking notes when the teacher explained the rule.",
+        options: ["was", "were", "are", "do"],
+        ans: 1,
+        exp: "Aksi yang sedang berlangsung di masa lalu ('when the teacher explained') dengan subjek jamak 'The students' memakai 'were taking'."
+      },
+      {
+        id: 42,
+        category: "Continuous Tense",
+        q: "Listen! Someone _____ the piano upstairs.",
+        options: ["play", "plays", "is playing", "was playing"],
+        ans: 2,
+        exp: "'Listen!' menunjukkan aksi yang sedang terdengar/berlangsung sekarang (Present Continuous): 'is playing'."
+      },
+      {
+        id: 43,
+        category: "Continuous Tense",
+        q: "She _____ on her thesis all afternoon yesterday.",
+        options: ["works", "worked", "was working", "is working"],
+        ans: 2,
+        exp: "'All afternoon yesterday' menekankan durasi aksi yang sedang berlangsung di masa lalu: 'was working'."
+      },
+      {
+        id: 44,
+        category: "Continuous Tense",
+        q: "We _____ preparing the presentation for tomorrow's seminar right now.",
+        options: ["am", "is", "are", "was"],
+        ans: 2,
+        exp: "'Right now' dengan subjek 'We' pada Present Continuous memakai 'are'."
+      },
+      {
+        id: 45,
+        category: "Continuous Tense",
+        q: "While Dina was cooking, her husband _____ the garden.",
+        options: ["clean", "cleans", "was cleaning", "is cleaning"],
+        ans: 2,
+        exp: "Dua aksi yang sama-sama sedang berlangsung bersamaan di masa lalu menggunakan Past Continuous: 'was cleaning'."
+      },
+      {
+        id: 46,
+        category: "Continuous Tense",
+        q: "Why _____ he driving so fast when the police stopped him?",
+        options: ["is", "are", "was", "were"],
+        ans: 2,
+        exp: "Konteks kejadian lampau ('when the police stopped him') dengan subjek tunggal 'he' memakai 'was driving'."
+      },
+      {
+        id: 47,
+        category: "Continuous Tense",
+        q: "I can't talk right now because I _____ a client.",
+        options: ["meet", "met", "am meeting", "was meeting"],
+        ans: 2,
+        exp: "'Right now' dan alasan tidak bisa bicara menunjukkan Present Continuous: 'am meeting'."
+      },
+      {
+        id: 48,
+        category: "Continuous Tense",
+        q: "They _____ waiting outside the cinema when we arrived.",
+        options: ["was", "were", "is", "are"],
+        ans: 1,
+        exp: "Kejadian lampau ('when we arrived') dengan subjek jamak 'They' memakai 'were waiting'."
+      },
+      {
+        id: 49,
+        category: "Continuous Tense",
+        q: "The weather _____ getting colder these days.",
+        options: ["is", "are", "was", "were"],
+        ans: 0,
+        exp: "Perubahan situasi yang sedang berlangsung saat ini ('these days') dengan subjek tunggal 'The weather' memakai 'is getting'."
+      },
+      {
+        id: 50,
+        category: "Continuous Tense",
+        q: "Was it _____ heavily when you left the office?",
+        options: ["rain", "rains", "raining", "rained"],
+        ans: 2,
+        exp: "Kalimat tanya Past Continuous ('Was it ...') membutuhkan bentuk V-ing: 'raining'."
+      },
+      {
+        id: 51,
+        category: "Continuous Tense",
+        q: "My friends and I _____ planning a trip to Lombok this week.",
+        options: ["am", "is", "are", "was"],
+        ans: 2,
+        exp: "Subjek 'My friends and I' (we) dalam Present Continuous memakai 'are planning'."
+      },
+
+      // --- SIMPLE FUTURE (52 - 67) ---
+      {
+        id: 52,
+        category: "Simple Future",
+        q: "Don't worry about the luggage; I _____ carry it for you.",
+        options: ["will", "am", "was", "did"],
+        ans: 0,
+        exp: "Tawaran atau keputusan spontan saat berbicara menggunakan 'will' + V1 ('will carry')."
+      },
+      {
+        id: 53,
+        category: "Simple Future",
+        q: "They _____ visit their grandparents next weekend.",
+        options: ["going to", "are going to", "is going to", "was going to"],
+        ans: 1,
+        exp: "Rencana masa depan ('next weekend') dengan subjek jamak 'They' memakai 'are going to' + V1."
+      },
+      {
+        id: 54,
+        category: "Simple Future",
+        q: "Look at those dark clouds! It _____ rain soon.",
+        options: ["will", "is going to", "was going to", "rained"],
+        ans: 1,
+        exp: "Prediksi berdasarkan bukti yang terlihat langsung ('dark clouds') sangat tepat memakai 'is going to'."
+      },
+      {
+        id: 55,
+        category: "Simple Future",
+        q: "She promises she _____ be late again tomorrow.",
+        options: ["won't", "isn't", "wasn't", "didn't"],
+        ans: 0,
+        exp: "Janji untuk masa depan ('tomorrow') dalam bentuk negatif menggunakan 'won't' (will not) + V1 ('be')."
+      },
+      {
+        id: 56,
+        category: "Simple Future",
+        q: "_____ you help me move this table to the corner?",
+        options: ["Will", "Are", "Do", "Did"],
+        ans: 0,
+        exp: "Permintaan bantuan secara langsung/spontan menggunakan 'Will + subjek + V1'."
+      },
+      {
+        id: 57,
+        category: "Simple Future",
+        q: "We _____ launch the new mobile app next month.",
+        options: ["will", "are", "were", "did"],
+        ans: 0,
+        exp: "'Next month' menandakan masa depan; 'will + V1 (launch)' membentuk Simple Future."
+      },
+      {
+        id: 58,
+        category: "Simple Future",
+        q: "I think our team _____ win the championship this year.",
+        options: ["will", "am", "was", "did"],
+        ans: 0,
+        exp: "Ungkapan opini/prediksi dengan 'I think' untuk masa depan menggunakan 'will'."
+      },
+      {
+        id: 59,
+        category: "Simple Future",
+        q: "He _____ going to study architecture after graduating from high school.",
+        options: ["am", "is", "are", "were"],
+        ans: 1,
+        exp: "Subjek tunggal 'He' dengan pola 'going to' membutuhkan to be 'is'."
+      },
+      {
+        id: 60,
+        category: "Simple Future",
+        q: "The seminar _____ start at 9:00 AM tomorrow morning.",
+        options: ["will", "is", "was", "did"],
+        ans: 0,
+        exp: "Keterangan 'tomorrow morning' merujuk ke waktu mendatang; 'will start' menyatakan Simple Future."
+      },
+      {
+        id: 61,
+        category: "Simple Future",
+        q: "I'm thirsty. I _____ get a glass of cold water.",
+        options: ["will", "am", "was", "have"],
+        ans: 0,
+        exp: "Keputusan spontan karena merasa haus saat itu menggunakan 'will get'."
+      },
+      {
+        id: 62,
+        category: "Simple Future",
+        q: "Will they _____ at the airport by noon?",
+        options: ["arrive", "arrives", "arrived", "arriving"],
+        ans: 0,
+        exp: "Setelah 'Will + subjek', kata kerja harus berupa bentuk dasar (V1) 'arrive'."
+      },
+      {
+        id: 63,
+        category: "Simple Future",
+        q: "We are not _____ buy a new car until next year.",
+        options: ["will", "going to", "go to", "went to"],
+        ans: 1,
+        exp: "Pola negatif 'be + not + going to + V1' digunakan untuk rencana masa depan ('until next year')."
+      },
+      {
+        id: 64,
+        category: "Simple Future",
+        q: "In ten years, electric cars _____ much more common.",
+        options: ["be", "will be", "are being", "were"],
+        ans: 1,
+        exp: "Prediksi jangka panjang ('In ten years') menggunakan 'will be'."
+      },
+      {
+        id: 65,
+        category: "Simple Future",
+        q: "What _____ you going to do this coming holiday?",
+        options: ["do", "are", "will", "did"],
+        ans: 1,
+        exp: "Pertanyaan dengan pola 'going to' dan subjek 'you' memakai 'are'."
+      },
+      {
+        id: 66,
+        category: "Simple Future",
+        q: "I promise I _____ tell anyone your secret.",
+        options: ["won't", "don't", "didn't", "am not"],
+        ans: 0,
+        exp: "Janji untuk masa depan yang bersifat negatif memakai 'won't' + V1 ('tell')."
+      },
+      {
+        id: 67,
+        category: "Simple Future",
+        q: "She _____ probably arrive around 5 o'clock this afternoon.",
+        options: ["will", "is", "has", "did"],
+        ans: 0,
+        exp: "Kata keterangan 'probably' dengan perkiraan waktu mendatang menggunakan 'will'."
+      },
+
+      // --- PRESENT PERFECT (68 - 84) ---
+      {
+        id: 68,
+        category: "Present Perfect",
+        q: "I _____ never _____ to Singapore before.",
+        options: ["have ... been", "has ... been", "did ... go", "was ... going"],
+        ans: 0,
+        exp: "Pengalaman hidup ('never ... before') tanpa waktu spesifik memakai Present Perfect. Untuk 'I', gunakan 'have ... been'."
+      },
+      {
+        id: 69,
+        category: "Present Perfect",
+        q: "She _____ worked at this company since 2018.",
+        options: ["have", "has", "is", "was"],
+        ans: 1,
+        exp: "'Since 2018' menunjukkan titik awal yang masih berlanjut hingga kini (Present Perfect). Subjek 'She' memakai 'has worked'."
+      },
+      {
+        id: 70,
+        category: "Present Perfect",
+        q: "They have lived in Medan _____ ten years.",
+        options: ["since", "for", "ago", "during"],
+        ans: 1,
+        exp: "'For' diikuti durasi waktu ('ten years') dalam Present Perfect untuk menyatakan lamanya berlangsung."
+      },
+      {
+        id: 71,
+        category: "Present Perfect",
+        q: "Have you _____ your homework yet?",
+        options: ["finish", "finishes", "finished", "finishing"],
+        ans: 2,
+        exp: "Kalimat tanya Present Perfect dengan 'yet' memakai pola 'Have + S + V3 (finished)'."
+      },
+      {
+        id: 72,
+        category: "Present Perfect",
+        q: "He _____ just _____ the email to the client.",
+        options: ["has ... sent", "have ... sent", "did ... send", "was ... sending"],
+        ans: 0,
+        exp: "'Just' (baru saja) dengan dampak yang relevan sekarang memakai Present Perfect; subjek 'He' memakai 'has sent'."
+      },
+      {
+        id: 73,
+        category: "Present Perfect",
+        q: "We haven't _____ the new movie yet.",
+        options: ["see", "saw", "seen", "seeing"],
+        ans: 2,
+        exp: "Pola negatif Present Perfect ('haven't + V3') dengan 'yet' menggunakan V3 'seen'."
+      },
+      {
+        id: 74,
+        category: "Present Perfect",
+        q: "_____ your brother ever tried rock climbing?",
+        options: ["Have", "Has", "Do", "Did"],
+        ans: 1,
+        exp: "Pertanyaan pengalaman dengan 'ever' dan subjek tunggal 'your brother' memakai 'Has'."
+      },
+      {
+        id: 75,
+        category: "Present Perfect",
+        q: "I have _____ read that novel twice; it's really good.",
+        options: ["already", "yet", "ago", "since"],
+        ans: 0,
+        exp: "'Already' (sudah) digunakan dalam kalimat positif Present Perfect ('have already read')."
+      },
+      {
+        id: 76,
+        category: "Present Perfect",
+        q: "The students have studied English _____ Monday.",
+        options: ["for", "since", "in", "at"],
+        ans: 1,
+        exp: "'Since' diikuti titik waktu spesifik ('Monday') dalam Present Perfect."
+      },
+      {
+        id: 77,
+        category: "Present Perfect",
+        q: "Oh no! I _____ my wallet. I can't find it anywhere.",
+        options: ["lose", "lost", "have lost", "am losing"],
+        ans: 2,
+        exp: "Aksi lampau yang hasilnya masih terasa sekarang ('can't find it anywhere') memakai Present Perfect: 'have lost'."
+      },
+      {
+        id: 78,
+        category: "Present Perfect",
+        q: "How long _____ you known each other?",
+        options: ["have", "has", "do", "did"],
+        ans: 0,
+        exp: "'How long' untuk kondisi yang masih berlangsung hingga kini dengan subjek 'you' memakai 'have known'."
+      },
+      {
+        id: 79,
+        category: "Present Perfect",
+        q: "My parents _____ visited Japan three times.",
+        options: ["has", "have", "are", "were"],
+        ans: 1,
+        exp: "Pengalaman berulang tanpa waktu lampau spesifik memakai Present Perfect; subjek jamak 'My parents' memakai 'have visited'."
+      },
+      {
+        id: 80,
+        category: "Present Perfect",
+        q: "She hasn't _____ her keys yet, so she is waiting outside.",
+        options: ["find", "found", "finding", "finds"],
+        ans: 1,
+        exp: "Bentuk V3 dari 'find' adalah 'found', digunakan setelah 'hasn't' pada Present Perfect."
+      },
+      {
+        id: 81,
+        category: "Present Perfect",
+        q: "We have known our neighbor _____ childhood.",
+        options: ["for", "since", "ago", "last"],
+        ans: 1,
+        exp: "'Since childhood' menunjukkan titik awal masa kecil hingga sekarang, sehingga memakai 'since'."
+      },
+      {
+        id: 82,
+        category: "Present Perfect",
+        q: "Has the manager _____ the contract yet?",
+        options: ["sign", "signs", "signed", "signing"],
+        ans: 2,
+        exp: "Pertanyaan 'Has + subjek + V3' memakai bentuk past participle 'signed'."
+      },
+      {
+        id: 83,
+        category: "Present Perfect",
+        q: "It has rained _____ two hours non-stop.",
+        options: ["since", "for", "from", "ago"],
+        ans: 1,
+        exp: "'Two hours' adalah durasi waktu, sehingga memakai preposisi 'for'."
+      },
+      {
+        id: 84,
+        category: "Present Perfect",
+        q: "I have _____ my breakfast, so I'm ready to leave.",
+        options: ["eat", "ate", "eaten", "eating"],
+        ans: 2,
+        exp: "Pola Present Perfect ('have + V3') dengan hasil yang relevan sekarang memakai V3 'eaten'."
+      },
+
+      // --- PAST REVIEW & PAST PERFECT (85 - 100) ---
+      {
+        id: 85,
+        category: "Past Review",
+        q: "By the time we arrived at the cinema, the movie _____.",
+        options: ["already started", "had already started", "has already started", "starts"],
+        ans: 1,
+        exp: "Film mulai ('had already started') terjadi lebih dulu sebelum kami tiba ('arrived') di masa lalu → gunakan Past Perfect (had + V3)."
+      },
+      {
+        id: 86,
+        category: "Past Review",
+        q: "I _____ to Bali in 2022, whereas I haven't been there since.",
+        options: ["go", "went", "have gone", "had gone"],
+        ans: 1,
+        exp: "Tahun spesifik di masa lalu ('in 2022') membutuhkan Simple Past ('went'), bukan Present Perfect."
+      },
+      {
+        id: 87,
+        category: "Past Review",
+        q: "After she _____ her degree, she moved to Surabaya.",
+        options: ["had completed", "completes", "has completed", "is completing"],
+        ans: 0,
+        exp: "Menyelesaikan gelar ('had completed') terjadi lebih dahulu sebelum pindah ('moved') di masa lalu → 'had completed'."
+      },
+      {
+        id: 88,
+        category: "Past Review",
+        q: "When did you _____ from your vacation?",
+        options: ["return", "returned", "returning", "have returned"],
+        ans: 0,
+        exp: "Pertanyaan Simple Past dengan 'When did + subjek' memakai bentuk dasar (V1) 'return'."
+      },
+      {
+        id: 89,
+        category: "Past Review",
+        q: "He realized he _____ his password at home.",
+        options: ["leaves", "left", "had left", "has left"],
+        ans: 2,
+        exp: "Lupa/meninggalkan password ('had left') terjadi sebelum ia menyadarinya ('realized') di masa lalu → Past Perfect."
+      },
+      {
+        id: 90,
+        category: "Past Review",
+        q: "They _____ married ten years ago.",
+        options: ["get", "got", "have got", "had got"],
+        ans: 1,
+        exp: "Penanda waktu lampau 'ten years ago' menggunakan Simple Past ('got')."
+      },
+      {
+        id: 91,
+        category: "Past Review",
+        q: "Before the rain started, we _____ the clothes from the line.",
+        options: ["take", "took", "had taken", "have taken"],
+        ans: 2,
+        exp: "Mengangkat pakaian ('had taken') terjadi lebih dulu sebelum hujan mulai ('started') di masa lalu."
+      },
+      {
+        id: 92,
+        category: "Past Review",
+        q: "She _____ never seen snow until she visited Europe last winter.",
+        options: ["has", "had", "was", "did"],
+        ans: 1,
+        exp: "Pengalaman sebelum suatu titik waktu di masa lalu ('until she visited Europe last winter') memakai Past Perfect: 'had never seen'."
+      },
+      {
+        id: 93,
+        category: "Past Review",
+        q: "Did you _____ the news last night?",
+        options: ["hear", "heard", "hearing", "hears"],
+        ans: 0,
+        exp: "Setelah 'Did you', kata kerja selalu kembali ke V1 'hear'."
+      },
+      {
+        id: 94,
+        category: "Past Review",
+        q: "The bus _____ before I reached the bus stop.",
+        options: ["left", "had left", "has left", "leaves"],
+        ans: 1,
+        exp: "Bus berangkat ('had left') terjadi lebih awal daripada saya sampai di halte ('reached') → Past Perfect."
+      },
+      {
+        id: 95,
+        category: "Past Review",
+        q: "I _____ my keys yesterday, but I found them this morning.",
+        options: ["lose", "lost", "have lost", "had losing"],
+        ans: 1,
+        exp: "Kejadian spesifik kemarin ('yesterday') menggunakan Simple Past 'lost'."
+      },
+      {
+        id: 96,
+        category: "Past Review",
+        q: "Had they _____ each other before they met at the conference?",
+        options: ["meet", "met", "meets", "meeting"],
+        ans: 1,
+        exp: "Kalimat tanya Past Perfect ('Had + subjek + V3') memakai bentuk V3 'met'."
+      },
+      {
+        id: 97,
+        category: "Past Review",
+        q: "Last summer, we _____ camping near Lake Toba.",
+        options: ["go", "went", "have gone", "had gone"],
+        ans: 1,
+        exp: "'Last summer' menunjukkan waktu lampau spesifik sehingga memakai Simple Past 'went'."
+      },
+      {
+        id: 98,
+        category: "Past Review",
+        q: "She was exhausted because she _____ for twelve hours.",
+        options: ["works", "worked", "had worked", "has worked"],
+        ans: 2,
+        exp: "Kondisi kelelahan di masa lalu ('was exhausted') disebabkan aksi sebelumnya ('had worked') → Past Perfect."
+      },
+      {
+        id: 99,
+        category: "Past Review",
+        q: "Why didn't he _____ the call earlier today?",
+        options: ["answer", "answered", "answering", "answers"],
+        ans: 0,
+        exp: "Setelah 'didn't', gunakan bentuk dasar (V1) 'answer'."
+      },
+      {
+        id: 100,
+        category: "Past Review",
+        q: "By 2020, they _____ five books together.",
+        options: ["wrote", "have written", "had written", "write"],
+        ans: 2,
+        exp: "Patokan waktu lampau 'By 2020' untuk aksi yang sudah rampung sebelum tahun tersebut memakai Past Perfect: 'had written'."
+      }
+    ];
+
+    const STORAGE_KEY = "english_tenses_100_quiz_state_v1";
+
+    // Application State
+    let state = {
+      activeView: "module", // 'module' | 'quiz'
+      selectedCategory: "ALL",
+      currentQuestionId: 1,
+      instantFeedback: true,
+      answers: {}, // { [questionId]: optionIndex (0..3) }
+      elapsedSeconds: 0,
+      submittedOnce: false
+    };
+
+    let timerInterval = null;
+    let toastTimeout = null;
+
+    // Load saved state from localStorage safely
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          state = {
+            ...state,
+            ...parsed,
+            answers: parsed.answers && typeof parsed.answers === "object" ? parsed.answers : {}
+          };
+        }
+      } catch (err) {
+        console.warn("Unable to read saved quiz state:", err);
+      }
+    }
+
+    // Save current state to localStorage safely
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (err) {
+        console.warn("Unable to save quiz state:", err);
+      }
+    }
+
+    // Display a non-blocking toast notification
+    function showToast(message, type = "info") {
+      const banner = document.getElementById("toast-banner");
+      const card = document.getElementById("toast-card");
+      const text = document.getElementById("toast-message");
+      if (!banner || !card || !text) return;
+
+      card.className = "rounded-2xl shadow-lg border px-4 py-3.5 flex items-start justify-between gap-3 ";
+      if (type === "success") {
+        card.className += "bg-emerald-900 text-white border-emerald-700";
+      } else if (type === "warning") {
+        card.className += "bg-amber-900 text-white border-amber-700";
+      } else {
+        card.className += "bg-slate-900 text-white border-slate-700";
+      }
+
+      text.textContent = message;
+      banner.classList.remove("hidden");
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        banner.classList.add("hidden");
+      }, 3200);
+    }
+
+    function hideToast() {
+      const banner = document.getElementById("toast-banner");
+      if (banner) banner.classList.add("hidden");
+    }
+
+    // Switch between Learning Module and 100-Question Quiz
+    function switchView(viewName) {
+      state.activeView = viewName;
+      saveState();
+
+      const moduleEl = document.getElementById("module-view");
+      const quizEl = document.getElementById("quiz-view");
+      const tabModule = document.getElementById("tab-module-btn");
+      const tabQuiz = document.getElementById("tab-quiz-btn");
+
+      if (viewName === "quiz") {
+        moduleEl.classList.add("hidden");
+        quizEl.classList.remove("hidden");
+        tabQuiz.className = "px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-brand-600 text-white shadow-sm";
+        tabModule.className = "px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900";
+        renderQuizWorkspace();
+      } else {
+        quizEl.classList.add("hidden");
+        moduleEl.classList.remove("hidden");
+        tabModule.className = "px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-brand-600 text-white shadow-sm";
+        tabQuiz.className = "px-3.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-600 hover:text-slate-900";
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function startQuizFromModule() {
+      state.selectedCategory = "ALL";
+      state.currentQuestionId = 1;
+      saveState();
+      switchView("quiz");
+    }
+
+    function startQuizWithCategory(category) {
+      state.selectedCategory = category;
+      const matching = getFilteredQuestions();
+      if (matching.length > 0) {
+        state.currentQuestionId = matching[0].id;
+      }
+      saveState();
+      switchView("quiz");
+      showToast(`Mode latihan fokus: ${category} (${matching.length} soal)`);
+    }
+
+    // Return questions matching active category filter
+    function getFilteredQuestions() {
+      if (state.selectedCategory === "ALL") {
+        return QUESTIONS;
+      }
+      return QUESTIONS.filter((q) => q.category === state.selectedCategory);
+    }
+
+    function setCategoryFilter(category) {
+      state.selectedCategory = category;
+      const filtered = getFilteredQuestions();
+      if (!filtered.some((q) => q.id === state.currentQuestionId) && filtered.length > 0) {
+        state.currentQuestionId = filtered[0].id;
+      }
+      saveState();
+      renderQuizWorkspace();
+    }
+
+    function toggleInstantFeedback() {
+      state.instantFeedback = !state.instantFeedback;
+      saveState();
+      const btn = document.getElementById("toggle-instant-btn");
+      if (btn) {
+        btn.textContent = state.instantFeedback
+          ? "⚡ Umpan Balik Instan: ON"
+          : "📝 Umpan Balik Instan: OFF";
+      }
+      renderQuestionCard();
+      showToast(
+        state.instantFeedback
+          ? "Umpan balik & pembahasan langsung aktif saat memilih jawaban."
+          : "Umpan balik langsung dimatikan (muncul setelah rekap/review)."
+      );
+    }
+
+    // Select an option (0..3) for current question
+    function selectOption(questionId, optionIndex) {
+      state.answers[questionId] = optionIndex;
+      saveState();
+      updateStats();
+      renderQuestionCard();
+      renderNavigatorGrid();
+    }
+
+    // Navigate previous/next within filtered question list
+    function navigateQuestion(delta) {
+      const filtered = getFilteredQuestions();
+      if (filtered.length === 0) return;
+      const currentIdx = filtered.findIndex((q) => q.id === state.currentQuestionId);
+      const nextIdx = currentIdx === -1 ? 0 : currentIdx + delta;
+      if (nextIdx >= 0 && nextIdx < filtered.length) {
+        state.currentQuestionId = filtered[nextIdx].id;
+        saveState();
+        renderQuestionCard();
+        renderNavigatorGrid();
+      }
+    }
+
+    // Jump directly to a specific question ID
+    function jumpToQuestion(questionId) {
+      state.currentQuestionId = questionId;
+      saveState();
+      renderQuestionCard();
+      renderNavigatorGrid();
+    }
+
+    // Compute overall and per-category scores
+    function computeScoreAnalytics() {
+      let answeredCount = 0;
+      let correctCount = 0;
+      let wrongCount = 0;
+
+      const perCategory = {};
+      const categories = [
+        "Simple Present",
+        "Simple Past",
+        "Continuous Tense",
+        "Simple Future",
+        "Present Perfect",
+        "Past Review"
+      ];
+
+      categories.forEach((cat) => {
+        perCategory[cat] = { total: 0, answered: 0, correct: 0 };
+      });
+
+      for (const q of QUESTIONS) {
+        perCategory[q.category].total += 1;
+        const chosen = state.answers[q.id];
+        if (typeof chosen === "number") {
+          answeredCount += 1;
+          perCategory[q.category].answered += 1;
+          if (chosen === q.ans) {
+            correctCount += 1;
+            perCategory[q.category].correct += 1;
+          } else {
+            wrongCount += 1;
+          }
+        }
+      }
+
+      const percentage = Math.round((correctCount / QUESTIONS.length) * 100);
+      return {
+        total: QUESTIONS.length,
+        answeredCount,
+        correctCount,
+        wrongCount,
+        percentage,
+        perCategory
+      };
+    }
+
+    // Update live score counters and progress bar
+    function updateStats() {
+      const stats = computeScoreAnalytics();
+
+      const headerScore = document.getElementById("header-score-text");
+      if (headerScore) {
+        headerScore.textContent = `${stats.correctCount} / ${stats.total} (${stats.percentage}%)`;
+      }
+
+      const statAnswered = document.getElementById("stat-answered");
+      const statCorrect = document.getElementById("stat-correct");
+      const statWrong = document.getElementById("stat-wrong");
+      const statScore = document.getElementById("stat-score");
+      const progressFill = document.getElementById("progress-bar-fill");
+
+      if (statAnswered) statAnswered.textContent = `${stats.answeredCount} / ${stats.total}`;
+      if (statCorrect) statCorrect.textContent = `${stats.correctCount}`;
+      if (statWrong) statWrong.textContent = `${stats.wrongCount}`;
+      if (statScore) statScore.textContent = `${stats.percentage}%`;
+      if (progressFill) {
+        const pctAnswered = Math.round((stats.answeredCount / stats.total) * 100);
+        progressFill.style.width = `${pctAnswered}%`;
+      }
+    }
+
+    // Render active question card, options, and explanation
+    function renderQuestionCard() {
+      const filtered = getFilteredQuestions();
+      if (filtered.length === 0) return;
+
+      let question = filtered.find((q) => q.id === state.currentQuestionId);
+      if (!question) {
+        question = filtered[0];
+        state.currentQuestionId = question.id;
+      }
+
+      const posIndex = filtered.findIndex((q) => q.id === question.id);
+      const userAnswer = state.answers[question.id];
+      const hasAnswered = typeof userAnswer === "number";
+      const showExplanation = hasAnswered && (state.instantFeedback || state.submittedOnce);
+
+      document.getElementById("q-number-badge").textContent = `Soal #${question.id}`;
+      document.getElementById("q-category-badge").textContent = question.category;
+      document.getElementById("q-prompt-text").textContent = question.q;
+      document.getElementById("q-hint-text").textContent =
+        `Topik: ${question.category} • Pilih jawaban yang paling tepat (A, B, C, atau D).`;
+      document.getElementById("filtered-position-indicator").textContent =
+        `Soal ${posIndex + 1} dari ${filtered.length} (${state.selectedCategory === "ALL" ? "Semua" : state.selectedCategory})`;
+
+      const statusBadge = document.getElementById("q-status-badge");
+      if (!hasAnswered) {
+        statusBadge.textContent = "Belum dijawab";
+        statusBadge.className = "text-xs font-semibold text-slate-400";
+      } else if (userAnswer === question.ans) {
+        statusBadge.textContent = "✓ Jawaban Benar";
+        statusBadge.className = "text-xs font-bold text-emerald-600";
+      } else {
+        statusBadge.textContent = "✕ Jawaban Kurang Tepat";
+        statusBadge.className = "text-xs font-bold text-rose-600";
+      }
+
+      // Render A, B, C, D options
+      const letters = ["A", "B", "C", "D"];
+      const optionsContainer = document.getElementById("options-container");
+      optionsContainer.innerHTML = "";
+
+      question.options.forEach((optText, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.onclick = () => selectOption(question.id, idx);
+
+        let btnStyle =
+          "w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-3.5 ";
+
+        if (showExplanation) {
+          if (idx === question.ans) {
+            btnStyle += "bg-emerald-50 border-emerald-500 text-emerald-950 font-semibold";
+          } else if (idx === userAnswer && userAnswer !== question.ans) {
+            btnStyle += "bg-rose-50 border-rose-500 text-rose-950 font-semibold";
+          } else {
+            btnStyle += "bg-white border-slate-200 text-slate-500";
+          }
+        } else if (hasAnswered && userAnswer === idx) {
+          btnStyle += "bg-brand-50 border-brand-600 text-brand-950 font-semibold";
+        } else {
+          btnStyle += "bg-white hover:bg-slate-50 border-slate-200 hover:border-brand-300 text-slate-800";
+        }
+
+        btn.className = btnStyle;
+
+        const badge = document.createElement("span");
+        badge.className =
+          "w-8 h-8 rounded-lg flex items-center justify-center text-xs font-extrabold shrink-0 border " +
+          (showExplanation && idx === question.ans
+            ? "bg-emerald-600 text-white border-emerald-600"
+            : showExplanation && idx === userAnswer && userAnswer !== question.ans
+            ? "bg-rose-600 text-white border-rose-600"
+            : hasAnswered && userAnswer === idx
+            ? "bg-brand-600 text-white border-brand-600"
+            : "bg-slate-100 text-slate-700 border-slate-200");
+        badge.textContent = letters[idx];
+
+        const label = document.createElement("span");
+        label.className = "text-sm sm:text-base flex-1";
+        label.textContent = optText;
+
+        btn.appendChild(badge);
+        btn.appendChild(label);
+        optionsContainer.appendChild(btn);
+      });
+
+      // Render Explanation Box
+      const expBox = document.getElementById("explanation-box");
+      if (showExplanation) {
+        const isCorrect = userAnswer === question.ans;
+        expBox.className =
+          "rounded-2xl border p-4 sm:p-5 space-y-2 transition-all " +
+          (isCorrect
+            ? "bg-emerald-50/80 border-emerald-200"
+            : "bg-amber-50/80 border-amber-200");
+        document.getElementById("explanation-verdict").textContent = isCorrect
+          ? "🎉 Tepat sekali! Penjelasan:"
+          : "💡 Pembahasan & Alasan Jawaban:";
+        document.getElementById("explanation-verdict").className =
+          "text-sm font-extrabold " + (isCorrect ? "text-emerald-800" : "text-amber-900");
+        document.getElementById("explanation-correct-opt").textContent =
+          `Jawaban Benar: ${letters[question.ans]}. ${question.options[question.ans]}`;
+        document.getElementById("explanation-detail").textContent = question.exp;
+        expBox.classList.remove("hidden");
+      } else {
+        expBox.classList.add("hidden");
+      }
+
+      // Prev / Next button states
+      document.getElementById("prev-q-btn").disabled = posIndex <= 0;
+      document.getElementById("next-q-btn").disabled = posIndex >= filtered.length - 1;
+    }
+
+    // Render 100-question navigator grid
+    function renderNavigatorGrid() {
+      const grid = document.getElementById("question-navigator-grid");
+      if (!grid) return;
+      grid.innerHTML = "";
+
+      const filteredIds = new Set(getFilteredQuestions().map((q) => q.id));
+
+      for (const q of QUESTIONS) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.onclick = () => jumpToQuestion(q.id);
+        btn.title = `Soal #${q.id} (${q.category})`;
+
+        const isCurrent = q.id === state.currentQuestionId;
+        const userAns = state.answers[q.id];
+        const answered = typeof userAns === "number";
+        const inFilter = filteredIds.has(q.id);
+
+        let cls =
+          "h-8 rounded-lg text-xs font-bold flex items-center justify-center border transition ";
+
+        if (isCurrent) {
+          cls += "bg-brand-600 text-white border-brand-700 ring-2 ring-brand-200";
+        } else if (answered && (state.instantFeedback || state.submittedOnce)) {
+          if (userAns === q.ans) {
+            cls += "bg-emerald-100 text-emerald-800 border-emerald-400";
+          } else {
+            cls += "bg-rose-100 text-rose-800 border-rose-400";
+          }
+        } else if (answered) {
+          cls += "bg-indigo-100 text-indigo-800 border-indigo-300";
+        } else {
+          cls += "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100";
+        }
+
+        if (!inFilter) {
+          cls += " opacity-30";
+        }
+
+        btn.className = cls;
+        btn.textContent = q.id;
+        grid.appendChild(btn);
+      }
+    }
+
+    // Update category filter button active states
+    function renderCategoryButtons() {
+      const buttons = document.querySelectorAll(".cat-btn");
+      buttons.forEach((btn) => {
+        const cat = btn.getAttribute("data-cat");
+        if (cat === state.selectedCategory) {
+          btn.className =
+            "cat-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-brand-600 text-white transition shadow-sm";
+        } else {
+          btn.className =
+            "cat-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
+        }
+      });
+
+      const statusText = document.getElementById("filter-status-text");
+      if (statusText) {
+        const count = getFilteredQuestions().length;
+        statusText.textContent =
+          state.selectedCategory === "ALL"
+            ? "Menampilkan semua 100 soal dari seluruh kategori tense."
+            : `Menampilkan ${count} soal pada kategori ${state.selectedCategory}.`;
+      }
+    }
+
+    // Show full score summary and category breakdown
+    function submitQuizSummary() {
+      state.submittedOnce = true;
+      saveState();
+
+      const stats = computeScoreAnalytics();
+      const panel = document.getElementById("score-report-panel");
+      const titleEl = document.getElementById("report-grade-title");
+      const descEl = document.getElementById("report-grade-desc");
+      const scoreEl = document.getElementById("report-final-score");
+      const pctEl = document.getElementById("report-percentage");
+      const gridEl = document.getElementById("category-breakdown-grid");
+
+      scoreEl.textContent = `${stats.correctCount} / ${stats.total}`;
+      pctEl.textContent = `${stats.percentage}% Akurasi • ${stats.answeredCount}/${stats.total} Terjawab`;
+
+      if (stats.percentage >= 85) {
+        titleEl.textContent = "Luar Biasa! Penguasaan Tenses Sangat Baik (A)";
+        descEl.textContent =
+          "Anda sudah memahami aturan rumus, penanda waktu, dan konteks kalimat tenses dengan sangat matang.";
+      } else if (stats.percentage >= 70) {
+        titleEl.textContent = "Bagus Sekali! Pemahaman Sudah Solid (B)";
+        descEl.textContent =
+          "Sebagian besar soal berhasil dijawab dengan benar. Pelajari ulang bagian yang masih terlewat pada pembahasan.";
+      } else if (stats.percentage >= 50) {
+        titleEl.textContent = "Cukup Baik, Terus Berlatih (C)";
+        descEl.textContent =
+          "Perhatikan kembali perbedaan bentuk kata kerja (V1, V2, V3, V-ing) serta kata kunci waktu pada modul materi.";
+      } else {
+        titleEl.textContent = "Ayo Ulangi & Pelajari Modul Materi";
+        descEl.textContent =
+          "Tinjau rumus dasar tiap tense di tab Modul Materi, lalu kerjakan soal secara bertahap dengan pembahasan instan.";
+      }
+
+      gridEl.innerHTML = "";
+      Object.entries(stats.perCategory).forEach(([catName, data]) => {
+        const catPct = data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0;
+        const card = document.createElement("div");
+        card.className = "rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-1.5";
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-slate-800">${catName}</span>
+            <span class="text-xs font-extrabold text-brand-700">${catPct}%</span>
+          </div>
+          <div class="text-xs text-slate-600">
+            Benar: <strong>${data.correct}</strong> / ${data.total} soal (Terjawab: ${data.answered})
+          </div>
+          <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+            <div class="bg-brand-600 h-full rounded-full" style="width: ${catPct}%"></div>
+          </div>
+        `;
+        gridEl.appendChild(card);
+      });
+
+      panel.classList.remove("hidden");
+      panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      renderQuestionCard();
+      renderNavigatorGrid();
+      showToast(`Skor Anda saat ini: ${stats.correctCount}/100 (${stats.percentage}%).`, "success");
+    }
+
+    // Reset quiz answers & timer cleanly
+    function confirmResetQuiz() {
+      state.answers = {};
+      state.currentQuestionId = 1;
+      state.selectedCategory = "ALL";
+      state.elapsedSeconds = 0;
+      state.submittedOnce = false;
+      saveState();
+
+      const panel = document.getElementById("score-report-panel");
+      if (panel) panel.classList.add("hidden");
+
+      renderQuizWorkspace();
+      showToast("Kuis telah direset ke soal #1. Selamat mengerjakan!", "warning");
+    }
+
+    function renderQuizWorkspace() {
+      const toggleBtn = document.getElementById("toggle-instant-btn");
+      if (toggleBtn) {
+        toggleBtn.textContent = state.instantFeedback
+          ? "⚡ Umpan Balik Instan: ON"
+          : "📝 Umpan Balik Instan: OFF";
+      }
+      renderCategoryButtons();
+      updateStats();
+      renderQuestionCard();
+      renderNavigatorGrid();
+      updateTimerDisplay();
+    }
+
+    // Timer formatting & interval
+    function formatTime(totalSec) {
+      const mins = Math.floor(totalSec / 60);
+      const secs = totalSec % 60;
+      return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    }
+
+    function updateTimerDisplay() {
+      const el = document.getElementById("timer-display");
+      if (el) el.textContent = formatTime(state.elapsedSeconds);
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        state.elapsedSeconds += 1;
+        updateTimerDisplay();
+        if (state.elapsedSeconds % 10 === 0) {
+          saveState();
+        }
+      }, 1000);
+    }
+
+    // Initialize app on load
+    window.addEventListener("DOMContentLoaded", () => {
+      loadState();
+      updateStats();
+      startTimer();
+      switchView(state.activeView === "quiz" ? "quiz" : "module");
+    });
+  </script>
+</body>
+</html>
